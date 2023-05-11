@@ -1,0 +1,55 @@
+.container {
+  overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Define três linhas: uma para o cabeçalho, uma para o conteúdo e uma para o footer */
+    min-height: 100vh;
+    grid-gap: 20px; /* Ajuste o valor de espaçamento conforme desejado */
+    grid-template-areas:
+      "header"
+      "content"
+      "footer"; /* Define as áreas do grid para o cabeçalho, conteúdo e footer */
+  }
+  
+  .header {
+    grid-area: header; /* Define o elemento com a classe .header para ocupar a área do cabeçalho */
+  }
+  
+  .content {
+    grid-area: content; /* Define o elemento com a classe .content para ocupar a área do conteúdo */
+  }
+  
+  .footer {
+    grid-area: footer; /* Define o elemento com a classe .footer para ocupar a área do footer */
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #042104;
+  }
+
+  section .loader {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  section .loader span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  section .loader span::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    background-color: #00ff0a;
+    box-shadow: 0 0 10px #00ff0a, 0 0 20px #00ff0a, 0 0 40px #00ff0a, 0 0 60px #00ff0a, 0 0 80px #00ff0a, 0 0 100px #00ff0a;
+  }
