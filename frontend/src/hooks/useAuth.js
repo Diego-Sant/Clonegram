@@ -1,22 +1,21 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-export const useAuth = () => {
-    const {user} = useSelector((state) => state.auth);
+export function useAuth() {
+  const { user } = useSelector(state => state.auth);
 
-    const [auth, setAuth] = useState(false);
-    const [loading, setLoading] = useState(true);
+  const [auth, setAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    // Conferir se o usuário está logado
-    useEffect(() => {
-        if(user) {
-            setAuth(true)
-        } else {
-            setAuth(false)
-        }
+  useEffect(() => {
+    if (user) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
 
-        setLoading(false)
-    }, [user])
+    setLoading(false);
+  }, [user]);
 
-    return [auth, loading];
+  return { auth, loading };
 }

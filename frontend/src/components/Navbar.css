@@ -20,9 +20,11 @@
   }
 
 #search-form {
-    position: relative;
-    width: 40%;
-    margin-left: 95px;
+    position: absolute;
+    width: 30%;
+    margin-left: 100px;
+    margin-top: 15px;
+    z-index: 100;
 }
 
 #search-form svg {

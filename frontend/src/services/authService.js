@@ -9,8 +9,8 @@ const register = async(data) => {
     try {
         const res = await fetch(api + "/usuarios/registrar", config).then((res) => res.json()).catch((err) => err)
     
-        if(res) {
-            localStorage.setItem("user", JSON.stringify(res))
+        if (res._id) {
+            localStorage.setItem('user', JSON.stringify(res));
         }
 
         return res;
@@ -31,9 +31,10 @@ const login = async(data) => {
     try {
         const res = await fetch(api + "/usuarios/login", config).then((res) => res.json()).catch((err) => err)
     
-        if(res) {
-            localStorage.setItem("user", JSON.stringify(res))
+        if (res._id) {
+            localStorage.setItem('user', JSON.stringify(res));
         }
+      
 
         return res;
     } catch (error) {

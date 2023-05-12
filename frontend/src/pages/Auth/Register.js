@@ -86,7 +86,7 @@ const Register = () => {
     if (error) {
       setShowError(true);
 
-      // Foi feito essa ligação para o name, profileName, email, password e confirmPassword não serem passado na Array
+      // Foi feito essa ligação para o name, profileName, email, password e confirmPassword não serem passados na Array
       setNameError(name => !name);
       setProfileNameError(profileName => !profileName);
       setEmailError(email => !email);
