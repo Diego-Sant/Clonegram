@@ -171,10 +171,10 @@ const register = async (req, res) => {
     const profileUser = await User.findOne({profileName})
 
     if(user) {
-        res.status(422).json({erros: ["Email já está sendo utilizado!"]})
+        res.status(422).json({errors: ["Email já está sendo utilizado!"]})
     }
     if(profileUser) {
-        res.status(422).json({erros: ["Nome do usuário já está sendo utilizado!"]})
+        res.status(422).json({errors: ["Nome do usuário já está sendo utilizado!"]})
     }
 
     const newUser = await User.create({

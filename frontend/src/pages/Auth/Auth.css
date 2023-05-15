@@ -19,10 +19,6 @@
     margin-top: 0;
 }
 
-.forminput {
-    width: 65%;
-}
-
 .subtitle {
     font-weight: bold;
     color: #999;
@@ -52,20 +48,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.error {
-    border: 1px solid red;
-}
-
-.input-wrapper {
-    display: flex;
-    justify-content: space-between;
-}
-
-.char-count {
-    margin-top: 7px;
-    font-size: .9em;
 }
 
 @media (max-width: 1100px) {

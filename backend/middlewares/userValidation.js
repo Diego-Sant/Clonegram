@@ -36,12 +36,12 @@ const loginValidation = () => {
     ]
 }
 
-const userUpdateValidation  = () => {
+const userUpdateValidation = () => {
     return [
-        body("name").optional().isLength({max: 20}).withMessage("O nome pode ter no máximo 20 caracteres!"),
-        body("password").optional().isLength({min: 6}).withMessage("A senha precisa ter pelo menos 6 caracteres!"),
-        body("bio").optional().isLength({max: 160}).withMessage("A bio pode ter no máximo 160 caracteres!"),
-    ]
-}
+        body("name").isLength({ max: 25 }).withMessage("O nome pode ter no máximo 20 caracteres!"),
+        body("profileName").isLength({ max: 16 }).withMessage("O nome pode ter no máximo 15 caracteres!"),
+        body("bio").optional().isLength({ max: 160 }).withMessage("A bio pode ter no máximo 160 caracteres!"),
+    ];
+  };
 
 module.exports = {userCreateValidation, loginValidation, userUpdateValidation}

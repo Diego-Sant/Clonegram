@@ -5,10 +5,10 @@ const imageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         let folder = ""
 
-        // Identificar se a requisição ta vindo de users ou photos
-        if (req.baseUrl.includes("users")) {
+        // Caso a URL tenha usuários ou fotos, será redimensionado para a pasta "users" ou "photos" respectivamente
+        if (req.baseUrl.includes("usuarios")) {
             folder = "users"
-        } else if (req.baseUrl.includes("photos")) {
+        } else if (req.baseUrl.includes("fotos")) {
             folder = "photos"
         }
 

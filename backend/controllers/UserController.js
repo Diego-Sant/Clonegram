@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const mongoose = require('mongoose');
  
 const jwtSecret = process.env.JWT_SECRET
- 
+
 // Gerar token do usuário
 const generateToken = (id) => {
     return jwt.sign({ id }, jwtSecret, {
@@ -22,7 +22,7 @@ const register = async (req, res) => {
     const user = await User.findOne({email});
     const profileUser = await User.findOne({ profileName });
 
-    if(user) {
+    if (user) {
         res.status(422).json({errors: ["Email já está sendo utilizado!"]})
         return
     }
@@ -95,7 +95,7 @@ const getCurrentUser = async(req, res) => {
 
 // Atualizar o perfil do usuário
 const update = async (req, res) => {
-    const {name, password, bio} = req.body
+    const {name, profileName, password, confirmPassword, bio} = req.body
 
     let profileImage = null
 
@@ -108,22 +108,73 @@ const update = async (req, res) => {
     const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select("-password");
 
     if(name) {
-        user.name = name
+        if (name.length > 25) {
+            return res.status(400).json({errors: ["O nome não pode ter mais de 25 caracteres!"]});
+        }
+        user.name = name;
     }
 
-    if(password) {
-        const salt = await bcrypt.genSalt();
-        const passwordHash = await bcrypt.hash(password, salt);
+    // Conferir se o profileName já existe
+    const profileUser = await User.findOne({ profileName });
 
-        user.password = passwordHash
+    // Permitir que o usuário se for identificado como dono do @ pode enviar o próprio profileName sem erros
+    if (profileUser && profileUser._id.toString() !== user._id.toString()) {
+        res.status(422).json({ errors: ["Nome do usuário já está sendo utilizado!"] });
+        return;
+    }
+
+    // Não permitir acentos
+    const removeDiacritics = (str) => {
+        if (!str) return '';
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
+
+    if (profileName) {
+        if (profileName.length > 16) {
+          return res.status(400).json({errors: ["O nome do usuário não pode ter mais de 15 caracteres!"]});
+        }
+
+        const nameWithoutDiacritics = removeDiacritics(profileName);
+        if (profileName !== nameWithoutDiacritics) {
+          return res.status(400).json({ errors: ["O nome do usuário não pode ter palavras acentuadas!"] });
+        }
+      
+        // Permitir que o @ seja iniciado no início da frase sem colidir com a proibição de símbolos
+        if (!/^@?[A-Za-z0-9\s-]*$/.test(profileName.replace(/^@/, ""))) {
+          return res.status(400).json({ errors: ["O nome do usuário não pode ter símbolos!"] });
+        }
+
+        user.profileName = profileName;
     }
 
     if(profileImage) {
         user.profileImage = profileImage
     }
 
-    if(bio) {
-        user.bio = bio
+    // Permitir que a bio seja enviada completamente vazia
+    if (typeof bio !== 'undefined' && bio !== null) {
+     if (bio.length > 160) {
+        return res.status(400).json({ errors: ["A bio não pode ter mais de 160 caracteres!"] });
+    }
+    user.bio = bio;
+    } else {
+        user.bio = '';
+    }
+
+    if (password) {
+        // Gerar hash de senha quando atualizado
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        if (password.length < 6) {
+            return res.status(400).json({ errors: ["A senha deve ter no mínimo 6 caracteres!"] });
+        }
+    
+        if (confirmPassword !== password) {
+            return res.status(400).json({ errors: ["As senhas não são iguais!"] });
+        }
+
+        user.password = passwordHash;
     }
 
     // Salvar no banco

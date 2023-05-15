@@ -31,6 +31,7 @@ const Navbar = () => {
   return (
     <nav id="nav">
       <Link to="/" id="title">Clonegram</Link>
+      {/* Esconder barra de pesquisa caso a URL for /login ou /registrar */}
       {!hideSearch && (
         <div id="search-container">
           <form id="search-form">
@@ -40,6 +41,7 @@ const Navbar = () => {
         </div>
       )}
       <ul id="nav-links">
+      {/* Aparecer essas opções apenas quando o usuário estiver autenticado */}
       {auth ? (
         <>
           <li>

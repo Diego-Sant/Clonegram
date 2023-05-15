@@ -23,7 +23,7 @@ const Login = () => {
 
   const {loading, error} = useSelector((state) => state.auth);
 
-  const handleSubmit  = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const user = {
@@ -31,7 +31,11 @@ const Login = () => {
       password
     }
 
-    dispatch(login(user));
+    try {
+      await dispatch(login(user)).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

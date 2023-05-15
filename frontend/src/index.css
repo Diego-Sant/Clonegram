@@ -20,6 +20,10 @@ body {
   color: #e7e9ea;
 }
 
+textarea {
+  font-family: 'Roboto', sans-serif;
+}
+
 a {
   color: #e7e9ea;
   text-decoration: none;
@@ -51,7 +55,7 @@ label span {
   font-size: .7em;
 }
 
-input {
+input, textarea {
   background-color: #000000;
   color: #e7e9ea;
   border: 1px solid #363636;
@@ -61,7 +65,7 @@ input {
   margin-bottom: .6em;
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
   color: #aaa;
 }
 
@@ -92,4 +96,22 @@ button:hover, input[type="submit"]:hover {
 
 .cancel-btn {
   background-color: #657786;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.char-count {
+  margin-top: 7px;
+  font-size: .9em;
+}
+
+.forminput {
+  width: 65%;
 }
