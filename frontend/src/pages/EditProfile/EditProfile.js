@@ -44,10 +44,9 @@ const EditProfile = () => {
     const [profileNameCharCount, setProfileNameCharCount] = useState(0);
     const [bioCharCount, setBioCharCount] = useState(0);
 
-
-    function handleProfileNameChange(event) {
+    const handleProfileNameChange = (e) => {
         // Adiciona @ no início toda vez que o usuário for digitar no input
-        let newValue = event.target.value;
+        let newValue = e.target.value;
         if (!newValue || newValue.startsWith("@")) {
           setProfileName(newValue);
         }
@@ -64,14 +63,14 @@ const EditProfile = () => {
     }
 
     // Contagem básica para o input específico contabilizar todos os caracteres que estão sendo digitados
-    const handleNameChange = (event) => {
-        const newName = event.target.value;
+    const handleNameChange = (e) => {
+        const newName = e.target.value;
         setName(newName);
         setNameCharCount(newName.length);
     }
 
-    const handleBioChange = (event) => {
-        const newBio = event.target.value;
+    const handleBioChange = (e) => {
+        const newBio = e.target.value;
         setBio(newBio);
         setBioCharCount(newBio.length);
     }
@@ -141,7 +140,7 @@ const EditProfile = () => {
         }, 2000);
     }
 
-    function handleFile(e) {
+    const handleFile = (e) => {
         // Irá pegar a imagem 0, ou seja, a primeira e única
         const image = e.target.files[0];
     
@@ -183,10 +182,13 @@ const EditProfile = () => {
             clearTimeout(timer);
             setShowError(false); // Redefinir o estado ao sair da página
           };
-        }
+        }// Verificação para não alterar profileImage e previewImage em caso de erro
+  else if (!profileImage && !previewImage) {
+    setPreviewImage(null);
+  }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [error]); // Se colocasse os InitialValue nas dependências os inputs iriam ficar quebrados
+    }, [error, profileImage, previewImage]); // Se colocasse os InitialValue nas dependências os inputs iriam ficar quebrados
 
   return (
     <div id="edit-profile">
@@ -195,22 +197,22 @@ const EditProfile = () => {
 
         {/* Preview da imagem */} {/* o "src" irá pegar a imagem na pasta uploads/users/ e irá transformar em uma URL única */}
         {(user.profileImage || previewImage) ? (
-        <img className="profile-image" src={previewImage ? URL.createObjectURL(previewImage) : `${uploads}/users/${user.profileImage}`} alt={user.name} />
+            <img className="profile-image" src={previewImage ? URL.createObjectURL(previewImage) : `${uploads}/users/${user.profileImage}`} alt={user.name} />
         ) : (
-        <img className="profile-image" src={ImagemPadrao} alt="Imagem Padrão" />
+            <img className="profile-image" src={ImagemPadrao} alt="Imagem Padrão" />
         )}
         {/* Caso não tenha nenhuma imagem, será puxado o "ImagemPadrao" para o local */}
 
         <form onSubmit={handleSubmit}>
             <label>
                 <div className="input-wrapper">
-                    <input type="text" placeholder="Nome" onChange={handleNameChange} value={name || ""} className={`forminput ${error && showError && nameError ? "error" : ""}`}  />
+                    <input type="text" placeholder="Nome" onChange={handleNameChange} value={name || ""} className={`forminput ${error && nameError ? "" : ""}`}  />
                     <div className="char-count">{nameCharCount}/25 caracteres</div>
                 </div>
             </label>
             <label>
                 <div className="input-wrapper">
-                    <input type="text" placeholder="Nome do usuário" onChange={handleProfileNameChange} value={profileName || ""} className={`forminput ${error && showError && profileNameError ? "error" : ""}`} />
+                    <input type="text" placeholder="Nome do usuário" onChange={handleProfileNameChange} value={profileName || ""} className={`forminput ${error && profileNameError ? "" : ""}`} />
                     <div className="char-count">{profileNameCharCount}/15 caracteres</div>
                 </div>
             </label>
@@ -226,14 +228,14 @@ const EditProfile = () => {
                     <span>Bio:</span>
                     <div className="char-countbio">{bioCharCount}/160 caracteres</div>
                 </div>    
-                <textarea type="text" placeholder="Seja criativo! &#128526;" onChange={handleBioChange} value={bio || ""} className={`bioinput ${error && showError && bioError ? "error" : ""}`} />
+                <textarea rows={2} wrap="soft" placeholder="Seja criativo! &#128526;" onChange={handleBioChange} value={bio || ""} className={`bioinput ${error && bioError ? "" : ""}`} />
             </label>
             <label>
-                <input type="text" placeholder="Nova senha" onChange={(e) => setPassword(e.target.value)} value={password || ""} className={`${error && showError && passwordError ? "error" : ""}`}  />
+                <input type="text" placeholder="Nova senha" onChange={(e) => setPassword(e.target.value)} value={password || ""} className={`${error && passwordError ? "" : ""}`}  />
             </label>
             {password && (
             <label>
-                <input type="text" placeholder="Confirme a senha" onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword || ""} className={`${error && showError && confirmPasswordError ? "error" : ""}`}  />
+                <input type="text" placeholder="Confirme a senha" onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword || ""} className={`${error && confirmPasswordError ? "" : ""}`}  />
             </label>
             )}
             {!loading && <input type="submit" value="Atualizar" />}

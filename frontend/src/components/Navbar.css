@@ -5,11 +5,7 @@
     background-color: #121212;
     border-bottom: 1px solid #363636;
     padding: .1em 1em;
-    height: 40px;
-}
-
-#title {
-    margin-bottom: 17px;
+    height: 50px;
 }
 
 #search-container {
@@ -23,7 +19,6 @@
     position: absolute;
     width: 30%;
     margin-left: 100px;
-    margin-top: 15px;
     z-index: 100;
 }
 
@@ -39,13 +34,11 @@
     border-radius: 5px;
     width: 100%;
     margin: 0;
-    margin-bottom: 30px;
 }
 
 #nav-links {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
 }
 
 #nav-links li {

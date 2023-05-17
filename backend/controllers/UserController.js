@@ -153,7 +153,7 @@ const update = async (req, res) => {
 
     // Permitir que a bio seja enviada completamente vazia
     if (typeof bio !== 'undefined' && bio !== null) {
-     if (bio.length > 160) {
+     if (bio.length > 170) {
         return res.status(400).json({ errors: ["A bio não pode ter mais de 160 caracteres!"] });
     }
     user.bio = bio;

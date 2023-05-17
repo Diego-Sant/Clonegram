@@ -64,6 +64,14 @@ const Login = () => {
     }
   }, [error, setEmailError, setPasswordError]);
 
+  if(loading) {
+    return (
+        <div className="loading-container">
+          <div className="lds-heart"><div></div></div>
+        </div>
+    );
+  }
+
   return (
     <div id="login">
       <h2>Clonegram</h2>

@@ -39,7 +39,17 @@ export const updateProfile = createAsyncThunk(
   
       return data;
     }
-  );
+);
+
+// Pegar detalhes do usuário por ID
+export const getUserDetails = createAsyncThunk(
+    "usuario/detalhes",
+    async (id, thunkAPI) => {
+        const data = await userService.getUserDetails(id);
+
+        return data;
+    }
+)
 
 export const userSlice = createSlice({
     name: "usuario",
@@ -73,6 +83,14 @@ export const userSlice = createSlice({
             state.error = action.payload;
             state.user = {};
             state.message = null;
+        }).addCase(getUserDetails.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        }).addCase(getUserDetails.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.user = action.payload;
         })
     }
 });

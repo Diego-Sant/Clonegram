@@ -36,9 +36,9 @@ const Register = () => {
 
   const {loading, error} = useSelector((state) => state.auth);
 
-  function handleProfileNameChange(event) {
+  const handleProfileNameChange = (e) => {
     // Adiciona @ no início toda vez que o usuário for digitar no input
-    let newValue = event.target.value;
+    let newValue = e.target.value;
     if (!newValue || newValue.startsWith("@")) {
       setProfileName(newValue);
     }
@@ -55,8 +55,8 @@ const Register = () => {
   }
 
   // Contagem básica para o input específico contabilizar todos os caracteres que estão sendo digitados
-  const handleNameChange = (event) => {
-    const newName = event.target.value;
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
     setName(newName);
     setNameCharCount(newName.length);
   }
@@ -110,13 +110,21 @@ const Register = () => {
     }
   }, [error, setNameError, setProfileNameError, setEmailError, setPasswordError, setConfirmPasswordError]);
 
+  if(loading) {
+    return (
+        <div className="loading-container">
+          <div className="lds-heart"><div></div></div>
+        </div>
+    );
+  }
+
   return (
     <div id="register">
       <h2>Clonegram</h2>
       <p className="subtitle">Cadastre-se para ver as fotos dos seus amigos &#128221;</p>
       <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
-            <input type="text" placeholder="Nome" value={name || ""} onChange={handleNameChange} className={`forminput ${error && nameError && showError ? 'error' : ''}`} />
+            <input type="text" placeholder="Nome" value={name || ""} onChange={handleNameChange} className={`forminput ${error && nameError ? 'error' : ''}`} />
             <div className="char-count">{nameCharCount}/25 caracteres</div>
           </div>
           <div className="input-wrapper">

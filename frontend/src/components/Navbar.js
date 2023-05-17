@@ -1,7 +1,7 @@
 import "./Navbar.css"
 
 import { NavLink, Link, useLocation } from "react-router-dom";
-import {BsSearch, BsHouseFill, BsFillPersonFill, BsFillCameraFill} from 'react-icons/bs'
+import {BsSearch, BsHouseFill, BsFillPersonVcardFill, BsFillPersonPlusFill} from 'react-icons/bs'
 
 //Hooks
 import { useAuth } from "../hooks/useAuth";
@@ -52,13 +52,13 @@ const Navbar = () => {
           {user && (
             <li>
               <NavLink to={`/usuarios/${user._id}`}>
-                <BsFillCameraFill />
+                <BsFillPersonVcardFill />
               </NavLink>
             </li>
           )}
           <li>
             <NavLink to="/perfil">
-              <BsFillPersonFill />
+              <BsFillPersonPlusFill />
             </NavLink>
           </li>
           <li>
