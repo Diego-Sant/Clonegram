@@ -10,19 +10,27 @@ import { useNavigate } from "react-router-dom";
 
 // Redux
 import {logout, reset} from "../slices/authSlice"
+import { useState } from "react";
 
 const Navbar = () => {
   const {auth} = useAuth();
   const {user} = useSelector((state) => state.auth);
 
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     dispatch(logout())
     dispatch(reset())
 
     navigate("/login");
+    setShowLogoutModal(false);
   }
 
   const location = useLocation();
@@ -40,6 +48,21 @@ const Navbar = () => {
           </form>
         </div>
       )}
+
+      {/* Modal de Confirmação */}
+      {showLogoutModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Já está indo embora?</h2>
+            <p>Tem certeza que deseja sair?</p>
+            <div className="modal-actions">
+              <button className="btn-logout" onClick={confirmLogout}>Sair</button>
+              <button onClick={() => setShowLogoutModal(false)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ul id="nav-links">
       {/* Aparecer essas opções apenas quando o usuário estiver autenticado */}
       {auth ? (
@@ -81,6 +104,7 @@ const Navbar = () => {
       )} 
       </ul>
     </nav>
+    
   )
 }
 

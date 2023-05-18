@@ -178,7 +178,7 @@ const update = async (req, res) => {
     }
 
     // Salvar no banco
-    await user.save()
+    await user.save();
 
     // Mostrar os campos alterados
     res.status(200).json(user);

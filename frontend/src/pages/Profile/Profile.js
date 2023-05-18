@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 
 // Redux
 import { getUserDetails } from "../../slices/userSlice";
-import { publishPhoto, resetMessage, getUserPhotos, deletePhoto } from "../../slices/photoSlice";
+import { publishPhoto, resetMessage, getUserPhotos, deletePhoto, updatePhoto } from "../../slices/photoSlice";
 
 // Imagem
 import ImagemPadrao from '../../img/padrao.png'
@@ -33,15 +33,23 @@ const Profile = () => {
     const [image, setImage] = useState("")
     const [body, setBody] = useState("")
 
+    const [editId, setEditId] = useState("");
+    const [editImage, setEditImage] = useState("");
+    const [editTitle, setEditTitle] = useState("");
+    const [editBody, setEditBody] = useState("")
+
     const [showError, setShowError] = useState(false);
 
     const [titleError, setTitleError] = useState(false);
     const [imageError, setImageError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
 
-      // Contagem de caracteres
+    // Contagem de caracteres
     const [titleCharCount, setTitleCharCount] = useState(0);
     const [bodyCharCount, setBodyCharCount] = useState(0);
+
+    const [titleEditCharCount, setTitleEditCharCount] = useState(0);
+    const [bodyEditCharCount, setBodyEditCharCount] = useState(0);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletePhotoId, setDeletePhotoId] = useState(null);
@@ -67,12 +75,26 @@ const Profile = () => {
         setBody(newBody);
         setBodyCharCount(newBody.length);
     }
+    
+    const handleTitleEdit = (e) => {
+        const newTitleEdit = e.target.value;
+        setEditTitle(newTitleEdit);
+        setTitleEditCharCount(newTitleEdit.length);
+    }
 
+    const handleBodyEdit = (e) => {
+        const newBodyEdit = e.target.value;
+        setEditBody(newBodyEdit);
+        setBodyEditCharCount(newBodyEdit.length);
+    }
+
+    // Modal de deletar postagem
     const handleDelete = (id) => {
         setDeletePhotoId(id);
         setShowDeleteModal(true);
     };
 
+    // Deletar uma postagem
     const confirmDeletePhoto = (id) => {
         dispatch(deletePhoto(id));
         setShowDeleteModal(false);
@@ -80,10 +102,55 @@ const Profile = () => {
         resetComponentMessage();
     };
 
+    // Abrir ou fechar formulário
+    const hideOrShowForms = () => {
+        newPhotoForm.current.classList.toggle('hide');
+        editPhotoForm.current.classList.toggle('hide');
+    }
+
+    // Atualizar uma postagem
+    const handleUpdate = (e) => {
+        e.preventDefault();
+
+        const photoData = {
+            title: editTitle,
+            body: editBody,
+            id: editId,
+        }
+
+        dispatch(updatePhoto(photoData));
+
+        // Timer
+        resetComponentMessage();
+    }
+
+    // Cancelar formulário de edição
+    const handleCancelEdit = () => {
+        hideOrShowForms();
+    }
+
+    // Abrir o formulário com as informações
+    const handleEdit = (photo) => {
+        // Checar se o formulário de edição está fechado
+        if (editPhotoForm.current.classList.contains('hide')) {
+            hideOrShowForms();
+        }
+
+        const newTitle = photo.title;
+        const newBody = photo.body
+
+        setEditId(photo._id);
+        setEditTitle(photo.title);
+        setEditBody(photo.body);
+        setEditImage(photo.image);
+        setTitleEditCharCount(newTitle.length);
+        setBodyEditCharCount(newBody.length);
+    }
+
     const handleFile = (e) => {
         // Irá pegar a imagem 0, ou seja, a primeira e única
         const image = e.target.files[0];
-    
+        
         // Atualizar status da imagem
         setImage(image);
     }
@@ -192,7 +259,7 @@ const Profile = () => {
                         </label>
                         <label>
                             <span>Imagem:</span>
-                            <input type="file" onChange={handleFile} className={errorPhoto && imageError ? 'error' : ''} />
+                            <input type="file" accept=".png, .webp, .svg, .jpg, .jpeg" onChange={handleFile} className={errorPhoto && imageError ? 'error' : ''} />
                         </label>
                         <label>
                         <div className="input-wrapper">
@@ -203,6 +270,33 @@ const Profile = () => {
                         </label>
                         {!loadingPhoto && <input type="submit" value="Postar" />}
                         {loadingPhoto && <input type="submit" value="Aguarde..." disabled />}
+                        {messagePhoto && <Message msg={messagePhoto} type="success"/>}
+                        {showError && <Message msg={errorPhoto} type="error"/>}
+                    </form>
+                </div>
+
+                <div className="edit-photo hide" ref={editPhotoForm}>
+                    <p>Editando:</p>
+                    {editImage && (
+                        <img src={`${uploads}/photos/${editImage}`} alt={editTitle} />
+                    )}
+                    <form onSubmit={handleUpdate}>
+                        <label>
+                            <div className="input-wrapper">
+                                <span>Título:</span>
+                                <div className="char-countbio">{titleEditCharCount}/30 caracteres</div>
+                            </div>
+                            <input type="text" placeholder="Insira um bom título! &#128170;" onChange={handleTitleEdit} value={editTitle || ""} className={errorPhoto && titleError ? 'error' : ''} />
+                        </label>
+                        <label>
+                            <div className="input-wrapper">
+                                <span>Corpo do texto:</span>
+                                <div className="char-countbio">{bodyEditCharCount}/280 caracteres</div>
+                            </div>
+                            <textarea rows={2} wrap="soft" placeholder="Comente sobre sua postagem! &#127863;" onChange={handleBodyEdit} value={editBody || ""} className={`bodyinput ${errorPhoto && bodyError ? "error" : ""}`}  />
+                        </label>
+                        <input type="submit" value="Atualizar" />
+                        <button className="cancel-btn" onClick={handleCancelEdit}>Voltar</button>
                         {messagePhoto && <Message msg={messagePhoto} type="success"/>}
                         {showError && <Message msg={errorPhoto} type="error"/>}
                     </form>
@@ -233,7 +327,7 @@ const Profile = () => {
                                 <Link to={`/fotos/${photo._id}`}>
                                     <BsFillEyeFill />
                                 </Link>
-                                <BsPencilFill />
+                                <BsPencilFill onClick={() => handleEdit(photo)} />
                                 <BsXLg onClick={() => handleDelete(photo._id)} /> {/* Feita uma arrow function pois sem o () => ele iria acionar sempre que abrir a página */}
                             </div>
                         ) : (
@@ -251,10 +345,10 @@ const Profile = () => {
         {showDeleteModal && (
             <div className="modal">
                 <div className="modal-content">
-                    <h2>Confirmação</h2>
-                        <p>Tem certeza que quer deletar essa postagem?</p>
+                    <h2>Está certo disso?</h2>
+                        <p>Tem certeza que deseja deletar essa postagem?</p>
                         <div className="modal-actions">
-                            <button onClick={() => confirmDeletePhoto(deletePhotoId)}>Deletar</button>
+                            <button className="btn-delete" onClick={() => confirmDeletePhoto(deletePhotoId)}>Deletar</button>
                             <button onClick={() => setShowDeleteModal(false)}>Cancelar</button>
                         </div>
                 </div>

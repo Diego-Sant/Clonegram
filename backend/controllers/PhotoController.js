@@ -2,6 +2,10 @@ const Photo = require("../models/Photo")
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
+// Apagar imagem do repositório
+const fs = require('fs');
+const path = require("path");
+
 const diacritics = require('diacritics')
 
 // Adicionar a foto com um usuário relacionado
@@ -39,6 +43,16 @@ const deletePhoto = async (req, res) => {
     
     try {
         const photo = await Photo.findById(mongoose.Types.ObjectId.createFromHexString(id))
+
+        // Excluir a foto do repositório
+        if (photo.image) {
+            const imagePath = path.join(__dirname, "../uploads/photos", photo.image);
+            fs.unlink(imagePath, (err) => {
+              if (err) {
+                console.error("Erro ao excluir a foto:", err);
+              }
+            });
+        }
 
         // Checar se a postagem existe
         if(!photo) {
