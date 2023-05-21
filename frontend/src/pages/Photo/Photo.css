@@ -1,0 +1,77 @@
+#photo {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 2em;
+}
+
+#photo img {
+    width: 100%;
+}
+
+.message-container {
+    margin: 1em 0;
+}
+
+.commentary {
+    border-bottom: 1px solid #363636;
+    margin-bottom: 10px;
+}
+
+.comments {
+    text-align: left;
+}
+
+.comments form {
+    margin-bottom: 2em;    
+    padding-bottom: 1em;
+    border-bottom: 1px solid #363636;
+}
+
+.comments textarea {
+    padding-bottom: 30px;
+    resize: none;
+}
+
+.author {
+    display: flex;
+    font-weight: bold;
+}
+
+#photo .author img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 1em;
+}
+
+.titleComment {
+    margin-bottom: 5px;
+}
+
+.char-countcomment {
+    margin-bottom: 5px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.flexusers {
+    display: flex;
+    text-align: center;
+}
+
+.user-name {
+    margin-right: 0.7em;
+}
+
+.user-profile {
+    display: block;
+    color: #71767b;
+    font-size: 0.8em;
+    margin-top: 18px;
+}
+
+.comment-text {
+    max-width: 350px;
+    word-wrap: break-word;
+}

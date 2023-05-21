@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 
 // Controller
-const {insertPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById, updatePhoto, likePhoto, commentPhoto, searchPhotos} = require("../controllers/PhotoController")
+const {insertPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById, updatePhoto, likePhoto, commentPhoto, searchPhotos, deleteComment} = require("../controllers/PhotoController")
 
 // Middlewares
 const {photoInsertValidation, photoUpdateValidation, commentValidation} = require("../middlewares/photoValidation");

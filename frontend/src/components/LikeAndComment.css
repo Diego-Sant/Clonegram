@@ -1,0 +1,76 @@
+.commentAndLike {
+    display: flex;
+    justify-content: right;
+    border-bottom: 1px solid #363636;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+}
+
+.comment svg {
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+.like {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+#home .like {
+    border: none;
+}
+
+.like svg {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.like p {
+    margin-left: 1em;
+}
+
+.like .heart-icon {
+    transition: color 0.3s;
+}
+
+.like .heart-icon.empty {
+    color: white;
+}
+  
+.like .heart-icon.filled {
+    color: #e31b23;
+}
+  
+.like .heart-icon.clicked {
+    animation: fillHeart 3s forwards;
+}
+  
+@keyframes fillHeart {
+    0% {
+        transform: scale(1);
+        color: white;
+    }
+    50% {
+        transform: scale(1.2);
+        color: #e31b23;
+    }
+    100% {
+        transform: scale(0.1);
+        color: #e31b23;
+    }
+}
+  
+.like .heart-icon.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+  
+.like.disabled .heart-icon {
+    pointer-events: none;
+    opacity: 0.7;
+}

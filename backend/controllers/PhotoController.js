@@ -29,7 +29,8 @@ const insertPhoto = async (req, res) => {
         title,
         body,
         userId: user._id,
-        userName: user.profileName,
+        userName: user.name,
+        userProfileName: user.profileName,
     });
 
     res.status(201).json(newPhoto)
@@ -173,7 +174,7 @@ const likePhoto = async(req, res) => {
     if(likedIndex !== -1) {
         photo.likes.splice(likedIndex, 1)
         await photo.save()
-        res.status(200).json({photoId: id, userId: reqUser._id, message: "Você removeu o like dessa postagem!"})
+        res.status(200).json({photoId: id, userId: reqUser._id})
         return
     }
 
@@ -182,7 +183,7 @@ const likePhoto = async(req, res) => {
 
     await photo.save()
 
-    res.status(200).json({photoId: id, userId: reqUser._id, message: "Você curtiu essa postagem!"})
+    res.status(200).json({photoId: id, userId: reqUser._id})
 }
 
 // Comentários
@@ -204,7 +205,8 @@ const commentPhoto = async(req, res) => {
     // Colocar na Array de comentários
     const userComment = {
         comment,
-        userName: `${user.name} ${user.profileName}`,
+        userName: user.name,
+        userProfileName: user.profileName,
         userImage: user.profileImage,
         userId: user._id
     }
@@ -236,5 +238,6 @@ module.exports = {
     updatePhoto,
     likePhoto,
     commentPhoto,
+    deleteComment,
     searchPhotos
 }

@@ -1,0 +1,40 @@
+.photo-item {
+    text-align: center;
+    width: 100%;
+}
+
+.photo-item img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.photo-author {
+    text-align: left;
+    font-size: 1.4em;
+}
+
+.photo-author a {
+    font-weight: bold;
+}
+
+.profileName {
+    text-align: left;
+    font-size: .85em;
+    margin-top: -10px;
+}
+
+.title {
+    text-align: left;
+}
+
+.profileName a {
+    color: #71767b;
+}
+
+.wrapbody {
+    max-width: 450px;
+    word-wrap: break-word;
+    text-align: left;
+}

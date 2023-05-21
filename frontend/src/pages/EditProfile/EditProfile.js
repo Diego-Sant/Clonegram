@@ -12,7 +12,6 @@ import { profile, resetMessage, updateProfile } from "../../slices/userSlice";
 // Componentes
 import Message from '../../components/Message';
 import ImagemPadrao from '../../img/padrao.png'
-import { Link } from "react-router-dom";
 
 const EditProfile = () => {
     const dispatch = useDispatch()

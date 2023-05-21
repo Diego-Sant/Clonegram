@@ -16,6 +16,8 @@ const Navbar = () => {
   const {auth} = useAuth();
   const {user} = useSelector((state) => state.auth);
 
+  const [query, setQuery] = useState("");
+
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const navigate = useNavigate()
@@ -33,6 +35,18 @@ const Navbar = () => {
     setShowLogoutModal(false);
   }
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if(query) {
+      return navigate(`/pesquisar?q=${query}`)
+    }
+
+    if (query === "") {
+      navigate("/");
+    }
+  }
+
   const location = useLocation();
   const hideSearch = location.pathname === "/login" || location.pathname === "/registrar"
 
@@ -42,9 +56,9 @@ const Navbar = () => {
       {/* Esconder barra de pesquisa caso a URL for /login ou /registrar */}
       {!hideSearch && (
         <div id="search-container">
-          <form id="search-form">
+          <form id="search-form" onSubmit={handleSearch}>
             <BsSearch />
-            <input type="text" placeholder="Pesquisar"/>
+            <input type="text" placeholder="Pesquisar" onChange={(e) => setQuery(e.target.value)}/>
           </form>
         </div>
       )}

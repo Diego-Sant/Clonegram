@@ -13,6 +13,7 @@ import Register from './pages/Auth/Register';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Profile from './pages/Profile/Profile';
 import Photo from './pages/Photo/Photo';
+import Search from './pages/Search/Search';
 
 function App() {
   const {auth, loading} = useAuth();
@@ -38,6 +39,7 @@ function App() {
                 <Route path="/login" element={!auth ? <Login /> : <Navigate to="/"/>}/>
                 <Route path="/registrar" element={!auth ? <Register /> : <Navigate to="/"/>}/>
 
+                <Route path="/pesquisar" element={auth ? <Search /> : <Navigate to="/login"/>} />
                 <Route path="/fotos/:id" element={auth ? <Photo /> : <Navigate to="/login"/>} />
               </Routes>
           <Footer />

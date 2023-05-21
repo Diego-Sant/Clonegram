@@ -1,0 +1,36 @@
+#home {
+    width: 65%;
+    margin: 0 auto;
+    padding-top: 2em;
+}
+
+#home .btn {
+    display: block;
+    max-width: 80px;
+    text-align: center;
+    margin: 0.5em 0 2em 0;
+}
+
+.titlehome, .paragraphhome, .no-photos {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.paragraphhome {
+    padding-bottom: 30px;
+}
+
+.colorpurple {
+    color: #7A4988;
+}
+
+.btn:hover {
+    opacity: 1;
+}
+
+.borderphoto {
+    border: 1px solid #363636;
+    padding: 10px;
+    margin-bottom: 10px;
+}

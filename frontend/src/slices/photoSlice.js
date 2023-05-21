@@ -74,6 +74,96 @@ export const updatePhoto = createAsyncThunk(
     }
 )
 
+// Pegar postagem por id
+export const getPhoto = createAsyncThunk(
+    "foto/postagem",
+    async (id, thunkAPI) => {
+        
+        const token = thunkAPI.getState().auth.user.token;
+
+        const data = await photoService.getPhoto(id, token);
+
+        return data;
+    }
+)
+
+// Curtir a postagem
+export const like = createAsyncThunk(
+    "foto/curtida",
+    async (id, thunkAPI) => {
+
+        const token = thunkAPI.getState().auth.user.token;
+
+        const data = await photoService.like(id, token);
+
+        // Verificar erros
+        if(data.errors) {
+            return thunkAPI.rejectWithValue(data.errors[0]);
+        }
+
+        return data;
+    }
+)
+
+// Retirar o like da postagem
+export const unlike = createAsyncThunk(
+    "foto/descurtida",
+    async (id, thunkAPI) => {
+      const token = thunkAPI.getState().auth.user.token;
+  
+      const data = await photoService.unlike(id, token);
+  
+      // Verificar erros
+      if (data.errors) {
+        return thunkAPI.rejectWithValue(data.errors[0]);
+      }
+  
+      return data;
+    }
+);
+
+// Adicionar comentário
+export const comment = createAsyncThunk(
+    "foto/comentario",
+    async (commentData, thunkAPI) => {
+        const token = thunkAPI.getState().auth.user.token;
+  
+        const data = await photoService.comment({comment: commentData.comment}, commentData.id, token);
+    
+        // Verificar erros
+        if (data.errors) {
+          return thunkAPI.rejectWithValue(data.errors[0]);
+        }
+    
+        return data;
+    }
+)
+
+// Pegar todas as postagens
+export const getPhotos = createAsyncThunk(
+    "foto/pegartudo",
+    // Usado _ para o código identificar que o primeiro argumento é dispensável
+    async (_, thunkAPI) => {
+        const token = thunkAPI.getState().auth.user.token;
+
+        const data = await photoService.getPhotos(token);
+
+        return data;
+    }
+)
+
+// Pesquisar por título, body e autor
+export const searchPhotos = createAsyncThunk(
+    "foto/pesquisa",
+    async (query, thunkAPI) => {
+        const token = thunkAPI.getState().auth.user.token;
+  
+        const data = await photoService.searchPhotos(query, token);
+    
+        return data;
+    }
+)
+
 export const photoSlice = createSlice({
     name: "foto",
     initialState,
@@ -83,6 +173,7 @@ export const photoSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        // Publicar postagem
         builder.addCase(publishPhoto.pending, (state) => {
             state.loading = true;
             state.error = false;
@@ -90,10 +181,8 @@ export const photoSlice = createSlice({
             state.loading = false;
             state.success = true;
             state.error = null;
-            const newPhoto = action.payload;
-          
-            state.photos = [newPhoto, ...state.photos]; // Adiciona a nova foto no início da matriz
-          
+            state.photo = action.payload;
+            state.photos.unshift(state.photo); // Adiciona a nova foto no início da matriz
             state.message = "Postagem publicada com sucesso!"
         }).addCase(publishPhoto.rejected, (state, action) => {
             state.loading = false;
@@ -101,7 +190,10 @@ export const photoSlice = createSlice({
             state.error = action.payload;
             state.photo = {};
             state.message = null;
-        }).addCase(getUserPhotos.pending, (state) => {
+        })
+        
+        // Pegar postagens do usuário
+        .addCase(getUserPhotos.pending, (state) => {
             state.loading = true;
             state.error = false;
         }).addCase(getUserPhotos.fulfilled, (state, action) => {
@@ -109,7 +201,10 @@ export const photoSlice = createSlice({
             state.success = true;
             state.error = null;
             state.photos = action.payload;
-        }).addCase(deletePhoto.pending, (state) => {
+        })
+        
+        // Deletar postagem
+        .addCase(deletePhoto.pending, (state) => {
             state.loading = true;
             state.error = false;
         }).addCase(deletePhoto.fulfilled, (state, action) => {
@@ -128,7 +223,10 @@ export const photoSlice = createSlice({
             state.error = action.payload;
             state.photo = {};
             state.message = null;
-        }).addCase(updatePhoto.pending, (state) => {
+        })
+        
+        // Atualizar postagem
+        .addCase(updatePhoto.pending, (state) => {
             state.loading = true;
             state.error = false;
         }).addCase(updatePhoto.fulfilled, (state, action) => {
@@ -136,7 +234,7 @@ export const photoSlice = createSlice({
             state.success = true;
             state.error = null;
             
-            state.photos.map((photo) => {
+            state.photos = state.photos.map((photo) => {
                 if(photo._id === action.payload.photo._id) {
                     return {
                         ...photo,
@@ -154,6 +252,116 @@ export const photoSlice = createSlice({
             state.error = action.payload;
             state.photo = {};
             state.message = null;
+        })
+        
+        // Pegar postagem
+        .addCase(getPhoto.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        }).addCase(getPhoto.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photo = action.payload;
+        })
+
+        // Curtir a postagem
+        .addCase(like.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            
+            // Colocar o id do usuário na requisição do like
+            if(state.photo.likes) {
+                state.photo.likes.push(action.payload.userId)
+            }
+
+            state.photos.map((photo) => {
+                if(photo._id === action.payload.photoId) {
+                    return photo.likes.push(action.payload.userId)
+                }
+                return photo;
+            })
+
+            state.message = action.payload.message;
+        }).addCase(like.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = action.payload;
+            state.message = null;
+        
+        })
+        
+        // Retirar o like da postagem
+        .addCase(unlike.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+          
+            // Remover o id do usuário da requisição do like
+            if (state.photo.likes) {
+              const index = state.photo.likes.indexOf(action.payload.userId);
+              if (index !== -1) {
+                state.photo.likes.splice(index, 1);
+              }
+            }
+          
+            state.photos = state.photos.map((photo) => {
+              if (photo._id === action.payload.photoId) {
+                const index = photo.likes.indexOf(action.payload.userId);
+                if (index !== -1) {
+                  photo.likes.splice(index, 1);
+                }
+              }
+              return photo;
+            });
+          
+            state.message = action.payload.message;
+        }).addCase(unlike.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = action.payload;
+            state.message = null;
+        })
+        
+        // Adicionar comentário
+        .addCase(comment.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+
+            // Usando push ao em vez do unshift pois os comentários costumam ser do mais velho para o mais novo
+            state.photo.comments.push(action.payload.comment);
+
+            state.message = action.payload.message;
+        }).addCase(comment.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = action.payload;
+            state.message = null;
+        
+        })
+        
+        // Pegar todas as postagens
+        .addCase(getPhotos.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        }).addCase(getPhotos.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photos = action.payload;
+        })
+
+        // Pesquisar por título, body e autor
+        .addCase(searchPhotos.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        }).addCase(searchPhotos.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photos = action.payload;
         })
     }
 });

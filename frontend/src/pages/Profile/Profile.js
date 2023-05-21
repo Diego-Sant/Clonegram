@@ -155,6 +155,10 @@ const Profile = () => {
         setImage(image);
     }
 
+    const handleRemoveImage = () => {
+        setImage(null);
+    }
+ 
     const resetComponentMessage = () => {
         // Timer na mensagem de success
         setTimeout(() => {
@@ -260,6 +264,7 @@ const Profile = () => {
                         <label>
                             <span>Imagem:</span>
                             <input type="file" accept=".png, .webp, .svg, .jpg, .jpeg" onChange={handleFile} className={errorPhoto && imageError ? 'error' : ''} />
+                            {image && <button onClick={handleRemoveImage}>Remover imagem</button>}
                         </label>
                         <label>
                         <div className="input-wrapper">
@@ -331,7 +336,11 @@ const Profile = () => {
                                 <BsXLg onClick={() => handleDelete(photo._id)} /> {/* Feita uma arrow function pois sem o () => ele iria acionar sempre que abrir a página */}
                             </div>
                         ) : (
-                            <Link className="btn" to={`/fotos/${photo._id}`}>Ver</Link>
+                            <div className="actions groweye">
+                                <Link to={`/fotos/${photo._id}`}>
+                                    <BsFillEyeFill />
+                                </Link>
+                            </div>
                         )}
                         </div>
                         {/* Caso o usuário seja dono da postagem irá aparecer os ícones */}
