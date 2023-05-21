@@ -238,6 +238,5 @@ module.exports = {
     updatePhoto,
     likePhoto,
     commentPhoto,
-    deleteComment,
     searchPhotos
 }
