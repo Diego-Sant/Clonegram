@@ -3,6 +3,7 @@ import "./Photo.css";
 import { uploads } from "../../utils/config";
 
 import ImagemPadrao from '../../img/padrao.png';
+import { BsTrash3Fill } from "react-icons/bs";
 
 // Componentes
 import Message from "../../components/Message";

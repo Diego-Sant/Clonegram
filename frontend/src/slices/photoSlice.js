@@ -339,7 +339,6 @@ export const photoSlice = createSlice({
             state.success = false;
             state.error = action.payload;
             state.message = null;
-        
         })
         
         // Pegar todas as postagens
