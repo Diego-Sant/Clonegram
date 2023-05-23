@@ -146,8 +146,8 @@ const Photo = () => {
             {photo.comments.map((comment) => (
               <div className="commentary" key={comment.comment}>
                 <div className="author">
-                  {comment.profileImage ? (
-                    <img src={`${uploads}/users/${comment.profileImage}`} alt={comment.userName} />
+                  {comment.userImage ? (
+                    <img src={`${uploads}/users/${comment.userImage}`} alt={comment.userName} />
                   ) : (
                     <img src={ImagemPadrao} alt="Imagem Padrão" />
                   )}
