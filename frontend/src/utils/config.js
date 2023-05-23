@@ -1,5 +1,5 @@
-export const api = "https://clonegram-reactapi.vercel.app/api"
-export const uploads = "https://clonegram-reactapi.vercel.app/uploads"
+export const api = "http://localhost:5000/api"
+export const uploads = "http://localhost:5000/uploads"
 
 export function requestConfig(method, data, token = null, image = null) {
     let config;
