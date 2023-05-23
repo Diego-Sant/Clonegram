@@ -3,7 +3,6 @@ import "./Photo.css";
 import { uploads } from "../../utils/config";
 
 import ImagemPadrao from '../../img/padrao.png';
-import { BsTrash3Fill } from "react-icons/bs";
 
 // Componentes
 import Message from "../../components/Message";
@@ -147,8 +146,8 @@ const Photo = () => {
             {photo.comments.map((comment) => (
               <div className="commentary" key={comment.comment}>
                 <div className="author">
-                  {comment.userImage ? (
-                    <img src={`${uploads}/users/${comment.userImage}`} alt={comment.userName} />
+                  {comment.profileImage ? (
+                    <img src={`${uploads}/users/${comment.profileImage}`} alt={comment.userName} />
                   ) : (
                     <img src={ImagemPadrao} alt="Imagem Padrão" />
                   )}

@@ -26,6 +26,8 @@
     height: 150px;
     border-radius: 50%;
     margin-right: 2em;
+    object-fit: cover;
+    object-position: center;
     border: 3px solid;
     animation: rainbow-border 4s infinite linear;
 }
